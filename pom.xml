@@ -6,7 +6,7 @@
 
 	<groupId>io.github.codesakshi</groupId>
 	<artifactId>simple-jpa-repository</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>Simple JPA</name>
@@ -50,14 +50,6 @@
 		<maven.compiler.target>${java-version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-
-	<distributionManagement>
-		<repository>
-			<id>ossrh</id>
-			<name>Central Repository OSSRH</name>
-			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2</url>
-		</repository>
-	</distributionManagement>
 
 	<profiles>
 		<profile>

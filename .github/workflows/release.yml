@@ -20,10 +20,15 @@ jobs:
           server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
-          gpg-private-key: ${{ secrets.GPG_SECRET_KEY }}
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: GPG_PASSPHRASE
 
       - name: Release to Central Repository
+        # --no-transfer-progress -> suppress dependency download logs
+        # --batch-mode -> Run in non-interactive
+        # maven.deploy.skip=true -> we are using nexus-staging-maven-plugin
+        #        to upload to central repositoy
+        #        So disable default maven.deploy plugin
         run: mvn --no-transfer-progress --batch-mode clean deploy -Dmaven.deploy.skip=true
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
