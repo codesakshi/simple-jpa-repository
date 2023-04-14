@@ -26,10 +26,11 @@ jobs:
       - name: Release to Central Repository
         # --no-transfer-progress -> suppress dependency download logs
         # --batch-mode -> Run in non-interactive
+        # -Prelease -> relase mvn profile Id
         # maven.deploy.skip=true -> we are using nexus-staging-maven-plugin
         #        to upload to central repositoy
         #        So disable default maven.deploy plugin
-        run: mvn --no-transfer-progress --batch-mode clean deploy -Dmaven.deploy.skip=true
+        run: mvn --no-transfer-progress --batch-mode -Preleaes clean deploy -Dmaven.deploy.skip=true
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}

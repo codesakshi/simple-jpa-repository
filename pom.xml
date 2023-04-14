@@ -53,7 +53,7 @@
 
 	<profiles>
 		<profile>
-			<id>deploy</id>
+			<id>release</id>
 			<build>
 				<plugins>
 
@@ -116,6 +116,7 @@
 						<configuration>
 							<serverId>ossrh</serverId>
 							<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+							<skipStagingRepositoryClose>true</skipStagingRepositoryClose>
 							<autoReleaseAfterClose>false</autoReleaseAfterClose>
 						</configuration>
 					</plugin>
