@@ -1,4 +1,4 @@
-package io.github.codesakshi.simplejpa.repository;
+package io.github.codesakshi.simplejpa;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

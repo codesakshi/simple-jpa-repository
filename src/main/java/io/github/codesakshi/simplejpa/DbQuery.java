@@ -1,5 +1,5 @@
 
-package io.github.codesakshi.simplejpa.repository;
+package io.github.codesakshi.simplejpa;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;

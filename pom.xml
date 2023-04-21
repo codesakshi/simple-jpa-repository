@@ -9,8 +9,8 @@
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>Simple JPA</name>
-	<description>A Simple JPA ORM library for Java.</description>
+	<name>Simple JPA Repository</name>
+	<description>A Simple JPA Repository library for Java.</description>
 	<url>https://github.com/codesakshi/simple-jpa-repository</url>
 	<developers>
 		<developer>
@@ -116,6 +116,7 @@
 						<configuration>
 							<serverId>ossrh</serverId>
 							<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+							<skipLocalStaging>true</skipLocalStaging>
 							<skipStagingRepositoryClose>true</skipStagingRepositoryClose>
 							<autoReleaseAfterClose>false</autoReleaseAfterClose>
 						</configuration>

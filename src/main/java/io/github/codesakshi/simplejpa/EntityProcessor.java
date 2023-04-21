@@ -1,4 +1,4 @@
-package io.github.codesakshi.simplejpa.repository;
+package io.github.codesakshi.simplejpa;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -29,7 +29,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import io.github.codesakshi.simplejpa.repository.Annotations.UpdateTimeStamp;
+import io.github.codesakshi.simplejpa.Annotations.UpdateTimeStamp;
 
 /**
  * Parse the entity to generate select SQL and Association detailss 
@@ -308,14 +308,10 @@ public class EntityProcessor<T,ID> {
 	/** Singleton Manager class to store all entity details for application ***/
 	private static class TableMetaInfoManager{
 
-		protected static TableMetaInfoManager instance = null;
+		/** Do not need lazy initialization **/
+		private static TableMetaInfoManager instance = new TableMetaInfoManager();
 
 		public static TableMetaInfoManager getInstance() {
-
-			if( null == instance ) {
-				instance = new TableMetaInfoManager();
-			}
-
 			return instance;
 		}
 

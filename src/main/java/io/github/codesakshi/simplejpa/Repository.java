@@ -1,4 +1,4 @@
-package io.github.codesakshi.simplejpa.repository;
+package io.github.codesakshi.simplejpa;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -35,14 +35,14 @@ import javax.persistence.Convert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.codesakshi.simplejpa.repository.DataConverter.ConverterType;
-import io.github.codesakshi.simplejpa.repository.DbQuery.ThrowableFunction;
-import io.github.codesakshi.simplejpa.repository.EntityProcessor.AssociationMetaInfo;
-import io.github.codesakshi.simplejpa.repository.EntityProcessor.ColumnJoinInfo;
-import io.github.codesakshi.simplejpa.repository.EntityProcessor.ManyToManyMetaInfo;
-import io.github.codesakshi.simplejpa.repository.EntityProcessor.OneToManyMetaInfo;
-import io.github.codesakshi.simplejpa.repository.EntityProcessor.SingleTargetMetaInfo;
-import io.github.codesakshi.simplejpa.repository.EntityProcessor.TableMetaInfo;
+import io.github.codesakshi.simplejpa.DataConverter.ConverterType;
+import io.github.codesakshi.simplejpa.DbQuery.ThrowableFunction;
+import io.github.codesakshi.simplejpa.EntityProcessor.AssociationMetaInfo;
+import io.github.codesakshi.simplejpa.EntityProcessor.ColumnJoinInfo;
+import io.github.codesakshi.simplejpa.EntityProcessor.ManyToManyMetaInfo;
+import io.github.codesakshi.simplejpa.EntityProcessor.OneToManyMetaInfo;
+import io.github.codesakshi.simplejpa.EntityProcessor.SingleTargetMetaInfo;
+import io.github.codesakshi.simplejpa.EntityProcessor.TableMetaInfo;
 
 /**
  * 
@@ -859,9 +859,9 @@ public class Repository<T,ID> {
 	 * @param conn SQL Connection
 	 * @param inId Id of entity to be deleted
 	 * @return number of entities deleted
-	 * @throws Throwable If the delete operation fails
+	 * @throws Exception If the delete operation fails
 	 */
-	public int deleteById( Connection conn, ID inId) throws Throwable {
+	public int deleteById( Connection conn, ID inId) throws Exception {
 
 		String whereClause = processor.getTableName() + "." + processor.getIdColumnName() + " = ? ";
 
@@ -875,9 +875,9 @@ public class Repository<T,ID> {
 	 * @param whereClause WHERE Criteria for the query
 	 * @param params Query Parameters
 	 * @return number of entities deleted
-	 * @throws Throwable If the delete operation fails
+	 * @throws Exception If the delete operation fails
 	 */
-	public int delete( Connection conn, String whereClause, Object... params) throws Throwable {
+	public int delete( Connection conn, String whereClause, Object... params) throws Exception {
 
 		int count = 0;
 		try {
@@ -898,7 +898,7 @@ public class Repository<T,ID> {
 
 			conn.rollback();
 
-			throw ex;
+			throw new Exception( ex );
 
 		}finally {
 
@@ -915,9 +915,9 @@ public class Repository<T,ID> {
 	 * @param whereClause WHERE Criteria for the query
 	 * @param varMap Query Parameter Map
 	 * @return number of entities deleted
-	 * @throws Throwable If the delete operation fails
+	 * @throws Exception If the delete operation fails
 	 */
-	public int delete( Connection conn, String whereClause, Map<String,Object> varMap) throws Throwable {
+	public int delete( Connection conn, String whereClause, Map<String,Object> varMap) throws Exception {
 
 		int size = 0;
 		try {
@@ -935,7 +935,7 @@ public class Repository<T,ID> {
 
 			size = entities.size();
 
-		}catch(Throwable ex ) {
+		}catch(SQLException ex ) {
 
 			conn.rollback();
 
@@ -1047,10 +1047,10 @@ public class Repository<T,ID> {
 	 * @param conn SQL Connection
 	 * @param inItem Entity Object to be saved.
 	 * @return Instance of Saved entity instance 
-	 * @throws Throwable If the entity save operation fails
+	 * @throws Exception If the entity save operation fails
 	 */
 	@SuppressWarnings("unchecked")
-	public T save(Connection conn, T inItem) throws Throwable {
+	public T save(Connection conn, T inItem) throws Exception {
 
 		T value = null;
 		try {
@@ -1081,7 +1081,7 @@ public class Repository<T,ID> {
 
 			conn.commit();
 
-		}catch(Throwable ex ) {
+		}catch(SQLException ex ) {
 
 			conn.rollback();
 
@@ -1101,10 +1101,10 @@ public class Repository<T,ID> {
 	 * @param conn SQL Connection
 	 * @param entities List of entities to be saved to database.
 	 * @return List of saved entities.
-	 * @throws Throwable If the entity save operation fails
+	 * @throws Exception If the entity save operation fails
 	 */
 	@SuppressWarnings("unchecked")
-	public List<T> saveAll( Connection conn, Iterable<T> entities) throws Throwable {
+	public List<T> saveAll( Connection conn, Iterable<T> entities) throws Exception {
 
 		// To use batch insert/update the we need to check 
 		// whether the input contains non null value for @Id field
@@ -1152,7 +1152,7 @@ public class Repository<T,ID> {
 
 			conn.rollback();
 
-			throw ex;
+			throw new Exception(ex);
 
 		}finally {
 

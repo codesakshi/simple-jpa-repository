@@ -1,4 +1,4 @@
-package io.github.codesakshi.simplejpa.repository;
+package io.github.codesakshi.simplejpa;
 
 
 import java.lang.annotation.ElementType;
@@ -22,7 +22,7 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Convert;
 import javax.persistence.ManyToOne;
 
-import io.github.codesakshi.simplejpa.repository.Annotations.UpdateTimeStamp;
+import io.github.codesakshi.simplejpa.Annotations.UpdateTimeStamp;
 
 /**
  * 
