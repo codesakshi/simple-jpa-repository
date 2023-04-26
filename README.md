@@ -55,7 +55,7 @@ Include the Maven artifact:
 
 ```
 
-Or include the [JAR](https:https://mvnrepository.com/artifact/io.github.codesakshi/simple-jpa-repository/latest) in your project
+Or include the [JAR](https://mvnrepository.com/artifact/io.github.codesakshi/simple-jpa-repository/latest) in your project
 
 ## Entity and Repository
 
