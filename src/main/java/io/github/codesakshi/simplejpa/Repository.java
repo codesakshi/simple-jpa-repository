@@ -882,30 +882,50 @@ public class Repository<T,ID> {
 		int count = 0;
 		
 		boolean autoCommit = conn.getAutoCommit();
-		try {
 
-			conn.setAutoCommit(false);
+		if( autoCommit ) {
+			
+			try {
+				
+				// Disable Auto commits
+				conn.setAutoCommit(false);
+				
+				//Call the method
+				count = delete0( conn, whereClause, params );
+				
+				conn.commit();
+				
+			}catch(Throwable ex ) {
 
-			// Find all objects for the where clause
-			List<T> entities = findMultipleWithWhere(conn, whereClause, params);
+				conn.rollback();
 
-			for( T entity : entities ) {
-				deleteEntitiesRecursive( conn, entity );
+				throw new Exception(ex);
+
+			}finally {
+
+				conn.setAutoCommit(autoCommit);
 			}
-
-			conn.commit();
-			count = entities.size();
-
-		}catch(Throwable ex ) {
-
-			conn.rollback();
-
-			throw new Exception( ex );
-
-		}finally {
-
-			conn.setAutoCommit(autoCommit);
+			
+		}else {
+			
+			// Manual commit is already enabled.
+			// Call the method
+			count = delete0( conn, whereClause, params );
 		}
+
+		return count;
+	}
+		
+	private int delete0( Connection conn, String whereClause, Object... params) throws Exception {
+
+		// Find all objects for the where clause
+		List<T> entities = findMultipleWithWhere(conn, whereClause, params);
+
+		for( T entity : entities ) {
+			deleteEntitiesRecursive( conn, entity );
+		}
+
+		int count = entities.size();
 
 		return count;
 	}
@@ -920,37 +940,56 @@ public class Repository<T,ID> {
 	 * @throws Exception If the delete operation fails
 	 */
 	public int delete( Connection conn, String whereClause, Map<String,Object> varMap) throws Exception {
-
-		int size = 0;
+		
+		int count = 0;
 		
 		boolean autoCommit = conn.getAutoCommit();
-		try {
 
-			conn.setAutoCommit(false);
+		if( autoCommit ) {
+			
+			try {
+				
+				// Disable Auto commits
+				conn.setAutoCommit(false);
+				
+				//Call the method
+				count = delete0( conn, whereClause, varMap );
+				
+				conn.commit();
+				
+			}catch(Throwable ex ) {
 
-			// Find all objects for the where clause
-			List<T> entities = findMultiple(conn, whereClause, varMap);
+				conn.rollback();
 
-			for( T entity : entities ) {
-				deleteEntitiesRecursive( conn, entity );
+				throw new Exception(ex);
+
+			}finally {
+
+				conn.setAutoCommit(autoCommit);
 			}
-
-			conn.commit();
-
-			size = entities.size();
-
-		}catch(SQLException ex ) {
-
-			conn.rollback();
-
-			throw ex;
-
-		}finally {
-
-			conn.setAutoCommit(autoCommit);
+			
+		}else {
+			
+			// Manual commit is already enabled.
+			// Call the method
+			count = delete0( conn, whereClause, varMap );
 		}
 
-		return size;
+		return count;
+	}
+	
+	private int delete0( Connection conn, String whereClause, Map<String,Object> varMap) throws Exception {
+
+		// Find all objects for the where clause
+		List<T> entities = findMultiple(conn, whereClause, varMap);
+
+		for( T entity : entities ) {
+			deleteEntitiesRecursive( conn, entity );
+		}
+
+		int count = entities.size();
+
+		return count;
 	}
 
 
@@ -1053,15 +1092,132 @@ public class Repository<T,ID> {
 	 * @return Instance of Saved entity instance 
 	 * @throws Exception If the entity save operation fails
 	 */
-	@SuppressWarnings("unchecked")
 	public T save(Connection conn, T inItem) throws Exception {
 
 		T value = null;
 		
 		boolean autoCommit = conn.getAutoCommit();
-		try {
 
-			conn.setAutoCommit(false);
+		if( autoCommit ) {
+			
+			try {
+				
+				// Disable Auto commits
+				conn.setAutoCommit(false);
+				
+				//Call the method
+				value = save0( conn, inItem );
+				
+				conn.commit();
+				
+			}catch(Throwable ex ) {
+
+				conn.rollback();
+
+				throw new Exception(ex);
+
+			}finally {
+
+				conn.setAutoCommit(autoCommit);
+			}
+			
+		}else {
+			// Manual commit is already enabled.
+			// Call the method
+			value = save0( conn, inItem );
+		}
+
+		return value;
+	}
+		
+	@SuppressWarnings("unchecked")
+	private T save0(Connection conn, T inItem) throws Exception {
+
+		T existingEntity = null;
+
+		ID idValue = (ID) getIDValue(inItem);
+
+		if( null != idValue ) {
+			existingEntity = findById(conn, idValue);
+		}
+
+		// Update including Nested entities
+		TableMetaInfo tableMetaInfo = EntityProcessor.getTableMetaInfo( inItem );
+
+		// Check whether PERSIST or MERGE
+		CascadeType cascadeType =  isIdPresentInDatabase( conn, tableMetaInfo, idValue ) 
+				? CascadeType.MERGE 
+						: CascadeType.PERSIST;
+
+		Map<String,Object> savedDataMap = updateEntityRecursive( conn, tableMetaInfo, existingEntity, inItem, cascadeType);
+
+		idValue = (ID) savedDataMap.get( tableMetaInfo.getIdColumnName() );
+
+		T value = findById(conn, idValue);
+
+		return value;
+	}
+
+	/**
+	 * Saves list of entities.
+	 * 
+	 * @param conn SQL Connection
+	 * @param entities List of entities to be saved to database.
+	 * @return List of saved entities.
+	 * @throws Exception If the entity save operation fails
+	 */
+	public List<T> saveAll( Connection conn, Iterable<T> entities) throws Exception {
+		
+		List<T> result = null;
+		
+		boolean autoCommit = conn.getAutoCommit();
+
+		if( autoCommit ) {
+			
+			try {
+				
+				// Disable Auto commits
+				conn.setAutoCommit(false);
+				
+				//Call the method
+				result = saveAll0( conn, entities );
+				
+				conn.commit();
+				
+			}catch(Throwable ex ) {
+
+				conn.rollback();
+
+				throw new Exception(ex);
+
+			}finally {
+
+				conn.setAutoCommit(autoCommit);
+			}
+			
+		}else {
+			// Manual commit is already enabled.
+			// Call the method
+			result = saveAll0( conn, entities );
+		}
+
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private List<T> saveAll0( Connection conn, Iterable<T> entities) throws Exception {
+
+		// To use batch insert/update the we need to check 
+		// whether the input contains non null value for @Id field
+		// Based on that we need to call either insert or update.
+		// But keeping same insertion order in return list will be difficult.
+		// So we are simply calling save here.
+		// Which will take care of calling either insert or update based on @Id field value.
+		// But we will not get the benefit of BATCH operation.
+
+		List<T> result = new ArrayList<T>();
+
+		for (Object inItem : entities) {
 
 			T existingEntity = null;
 
@@ -1078,93 +1234,11 @@ public class Repository<T,ID> {
 			CascadeType cascadeType =  isIdPresentInDatabase( conn, tableMetaInfo, idValue ) 
 					? CascadeType.MERGE 
 							: CascadeType.PERSIST;
-
 			Map<String,Object> savedDataMap = updateEntityRecursive( conn, tableMetaInfo, existingEntity, inItem, cascadeType);
 
 			idValue = (ID) savedDataMap.get( tableMetaInfo.getIdColumnName() );
 
-			value = findById(conn, idValue);
-
-			conn.commit();
-
-		}catch(SQLException ex ) {
-
-			conn.rollback();
-
-			throw ex;
-
-		}finally {
-
-			conn.setAutoCommit(autoCommit);
-		}
-
-		return value;
-	}
-
-	/**
-	 * Saves list of entities.
-	 * 
-	 * @param conn SQL Connection
-	 * @param entities List of entities to be saved to database.
-	 * @return List of saved entities.
-	 * @throws Exception If the entity save operation fails
-	 */
-	@SuppressWarnings("unchecked")
-	public List<T> saveAll( Connection conn, Iterable<T> entities) throws Exception {
-
-		// To use batch insert/update the we need to check 
-		// whether the input contains non null value for @Id field
-		// Based on that we need to call either insert or update.
-		// But keeping same insertion order in return list will be difficult.
-		// So we are simply calling save here.
-		// Which will take care of calling either insert or update based on @Id field value.
-		// But we will not get the benefit of BATCH operation.
-
-		List<T> result = null;
-
-		boolean autoCommit = conn.getAutoCommit();
-		
-		try {
-
-			conn.setAutoCommit(false);
-
-			result = new ArrayList<T>();
-
-			for (Object inItem : entities) {
-
-				T existingEntity = null;
-
-				ID idValue = (ID) getIDValue(inItem);
-
-				if( null != idValue ) {
-					existingEntity = findById(conn, idValue);
-				}
-
-				// Update including Nested entities
-				TableMetaInfo tableMetaInfo = EntityProcessor.getTableMetaInfo( inItem );
-
-				// Check whether PERSIST or MERGE
-				CascadeType cascadeType =  isIdPresentInDatabase( conn, tableMetaInfo, idValue ) 
-						? CascadeType.MERGE 
-								: CascadeType.PERSIST;
-				Map<String,Object> savedDataMap = updateEntityRecursive( conn, tableMetaInfo, existingEntity, inItem, cascadeType);
-
-				idValue = (ID) savedDataMap.get( tableMetaInfo.getIdColumnName() );
-
-				result.add( findById(conn, idValue) );
-			}
-
-			conn.commit();
-
-		}catch(Throwable ex ) {
-
-			conn.rollback();
-
-			throw new Exception(ex);
-
-		}finally {
-
-			conn.setAutoCommit(autoCommit);
+			result.add( findById(conn, idValue) );
 		}
 
 		return result;
