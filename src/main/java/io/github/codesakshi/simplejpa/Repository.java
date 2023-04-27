@@ -880,6 +880,8 @@ public class Repository<T,ID> {
 	public int delete( Connection conn, String whereClause, Object... params) throws Exception {
 
 		int count = 0;
+		
+		boolean autoCommit = conn.getAutoCommit();
 		try {
 
 			conn.setAutoCommit(false);
@@ -902,7 +904,7 @@ public class Repository<T,ID> {
 
 		}finally {
 
-			conn.setAutoCommit(false);
+			conn.setAutoCommit(autoCommit);
 		}
 
 		return count;
@@ -920,6 +922,8 @@ public class Repository<T,ID> {
 	public int delete( Connection conn, String whereClause, Map<String,Object> varMap) throws Exception {
 
 		int size = 0;
+		
+		boolean autoCommit = conn.getAutoCommit();
 		try {
 
 			conn.setAutoCommit(false);
@@ -943,7 +947,7 @@ public class Repository<T,ID> {
 
 		}finally {
 
-			conn.setAutoCommit(false);
+			conn.setAutoCommit(autoCommit);
 		}
 
 		return size;
@@ -1053,6 +1057,8 @@ public class Repository<T,ID> {
 	public T save(Connection conn, T inItem) throws Exception {
 
 		T value = null;
+		
+		boolean autoCommit = conn.getAutoCommit();
 		try {
 
 			conn.setAutoCommit(false);
@@ -1089,7 +1095,7 @@ public class Repository<T,ID> {
 
 		}finally {
 
-			conn.setAutoCommit(false);
+			conn.setAutoCommit(autoCommit);
 		}
 
 		return value;
@@ -1116,6 +1122,8 @@ public class Repository<T,ID> {
 
 		List<T> result = null;
 
+		boolean autoCommit = conn.getAutoCommit();
+		
 		try {
 
 			conn.setAutoCommit(false);
@@ -1156,7 +1164,7 @@ public class Repository<T,ID> {
 
 		}finally {
 
-			conn.setAutoCommit(false);
+			conn.setAutoCommit(autoCommit);
 		}
 
 		return result;
