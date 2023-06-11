@@ -662,10 +662,14 @@ public class DbQuery {
 			if( chVal == '\'') {
 
 				inSingleQuote = ! inSingleQuote;
+				
+				parsedQuery.append(chVal);
 
 			}else if( chVal == '\"') {
 
 				inDoubleQuote = ! inDoubleQuote;
+				
+				parsedQuery.append(chVal);
 
 			} else if( ! inSingleQuote && ! inDoubleQuote && chVal == '=' ) {
 
