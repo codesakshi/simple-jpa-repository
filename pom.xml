@@ -6,7 +6,7 @@
 
 	<groupId>io.github.codesakshi</groupId>
 	<artifactId>simple-jpa-repository</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<packaging>jar</packaging>
 
 	<name>Simple JPA Repository</name>
