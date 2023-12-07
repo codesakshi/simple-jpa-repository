@@ -18,10 +18,10 @@ jobs:
         with:
           java-version: '8.0'
           server-id: ossrh
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
+          server-username: ${{ secrets.MAVEN_USERNAME }}
+          server-password: ${{ secrets.MAVEN_PASSWORD }}
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg-passphrase: GPG_PASSPHRASE
+          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Release to Central Repository
         # --no-transfer-progress -> suppress dependency download logs
@@ -31,8 +31,5 @@ jobs:
         #        to upload to central repositoy
         #        So disable default maven.deploy plugin
         run: mvn --no-transfer-progress --batch-mode -Prelease clean deploy -Dmaven.deploy.skip=true
-        env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
           
