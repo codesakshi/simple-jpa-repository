@@ -21,7 +21,7 @@ jobs:
           server-username: ${{ secrets.MAVEN_USERNAME }}
           server-password: ${{ secrets.MAVEN_PASSWORD }}
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          gpg-passphrase: GPG_PASSPHRASE
 
       - name: Release to Central Repository
         # --no-transfer-progress -> suppress dependency download logs
@@ -31,5 +31,7 @@ jobs:
         #        to upload to central repositoy
         #        So disable default maven.deploy plugin
         run: mvn --no-transfer-progress --batch-mode -Prelease clean deploy -Dmaven.deploy.skip=true
-
+        env:
+          # GPG_PASSPHRASE should be in env section
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           
