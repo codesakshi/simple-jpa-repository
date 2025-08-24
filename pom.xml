@@ -6,7 +6,7 @@
 
 	<groupId>io.github.codesakshi</groupId>
 	<artifactId>simple-jpa-repository</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.5</version>
 	<packaging>jar</packaging>
 
 	<name>Simple JPA Repository</name>
@@ -16,7 +16,7 @@
 		<developer>
 			<id>codesakshi</id>
 			<name>Anilal P S</name>
-			<email>anilalps@gmail.com</email>
+			<email>anilalps.dev@gmail.com</email>
 			<organization>Code Sakshi</organization>
 			<organizationUrl>https://github.com/codesakshi</organizationUrl>
 			<roles>

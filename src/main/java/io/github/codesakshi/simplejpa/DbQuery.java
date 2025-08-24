@@ -61,7 +61,7 @@ public class DbQuery {
 	 * PreparedStatement configuration
 	 *
 	 */
-	public class StatementConfiguration {
+	public static class StatementConfiguration {
 
 		private Integer fetchDirection;
 		private Integer fetchSize;
