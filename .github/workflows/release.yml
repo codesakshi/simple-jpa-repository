@@ -1,4 +1,7 @@
 name: Publish package to the Maven Central Repository
+
+# This script will run automatically when a new tag is
+# created with 'v' prefix
 on:
   push:
     tags:
